@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'livereload',
     'django.contrib.staticfiles',
+    'blog.apps.BlogConfig',  # Ensure this is the correct path to your BlogConfig
     
 ]
 
