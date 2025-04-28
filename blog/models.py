@@ -7,21 +7,21 @@ from django.contrib import admin
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(status=Post.status.PUBLISHED)
+        return super().get_queryset().filter(status=Post.Status.PUBLISHED)
 
 class Post(models.Model):
-    class status(models.TextChoices):
+    class Status(models.TextChoices):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
 
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200)
     body = models.TextField()
-    published = models.DateTimeField(default=timezone.now)
+    publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    status = models.CharField(max_length=2, choices=status.choices, default=status.DRAFT)
+    status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT)
     show_facets = admin.ShowFacets.ALWAYS
     objects = models.Manager()  # The default manager.
     published = PublishedManager()  # The custom manager
@@ -31,7 +31,7 @@ class Post(models.Model):
         return self.title
     
     class Meta:
-        ordering = ['-published']
+        ordering = ['-publish']
         indexes = [
-            models.Index(fields=['-published']),
+            models.Index(fields=['-publish']),
         ]
